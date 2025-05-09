@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: 180, 83, 9; /* Burnt Orange */
+  --secondary-color: 234, 88, 12; /* Darker Orange */
+  --accent-color: 153, 27, 27; /* Dark Red */
+  --success-color: 34, 197, 94; /* Green */
+  --warning-color: 234, 88, 12; /* Orange */
+  --error-color: 239, 68, 68; /* Red */
+  --text-color: 15, 23, 42; /* Text Gray-900 */
+  --text-secondary: 71, 85, 105; /* Text Gray-600 */
+  --bg-light: 255, 247, 237; /* bg-orange-50 */
+  --bg-card: 255, 255, 255; /* White */
+  --border-light: 241, 245, 249; /* Gray-100 */
+}
+
+@layer base {
+  html {
+    font-family: 'Tajawal', sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    direction: rtl;
+    text-align: right;
+    @apply bg-orange-50;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold leading-tight text-gray-900;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl mb-4;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl mb-3;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl mb-2;
+  }
+  
+  p {
+    @apply leading-relaxed text-gray-600;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-6 py-3 rounded-lg transition-all duration-300 font-medium text-base 
+           disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 active:scale-100;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-white hover:text-primary
+           shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 
+           border border-primary hover:border-primary;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-white hover:bg-white hover:text-secondary
+           shadow-lg shadow-secondary/30 hover:shadow-xl hover:shadow-secondary/40
+           border border-secondary hover:border-secondary;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 
+           hover:shadow-xl hover:-translate-y-1 border border-gray-100;
+  }
+  
+  .input {
+    @apply w-full px-4 py-3 rounded-lg border border-gray-300 bg-white
+           focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent
+           transition-all duration-200 text-base;
+  }
+
+  .section-title {
+    @apply text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2 
+           after:content-[''] after:flex-1 after:h-1 after:bg-primary/20 after:rounded-full;
+  }
+
+  .category-card {
+    @apply relative overflow-hidden rounded-xl cursor-pointer;
+  }
+
+  .category-card img {
+    @apply w-full h-64 object-cover transition-transform duration-500;
+  }
+
+  .category-card:hover img {
+    @apply scale-110;
+  }
+
+  .category-card .overlay {
+    @apply absolute inset-0 bg-gradient-to-t from-black/80 to-transparent 
+           flex items-end p-6 transition-opacity duration-300;
+  }
+
+  .category-card:hover .overlay {
+    @apply bg-gradient-to-t from-primary/90 to-transparent;
+  }
+  
+  /* تنسيق السلة الجانبية الدائمة */
+  .persistent-cart {
+    @apply fixed inset-y-0 left-0 bg-white shadow-xl z-40 transition-all duration-300;
+  }
+  
+  .persistent-cart-collapsed {
+    @apply w-20 hover:bg-orange-50;
+    /* تعديل على الهاتف لإظهار كلمة السلة */
+    @apply md:w-20 w-24;
+  }
+  
+  .persistent-cart-expanded {
+    @apply w-full sm:w-96;
+  }
+  
+  .cart-item-thumb {
+    @apply w-12 h-12 rounded-full object-cover border-2 border-primary;
+  }
+  
+  .cart-badge {
+    @apply absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full flex items-center justify-center;
+  }
+  
+  .cart-small-badge {
+    @apply w-5 h-5;
+  }
+  
+  .cart-large-badge {
+    @apply w-6 h-6;
+  }
+  
+  /* إضافة أنماط للسلة العائمة عند التمرير للأسفل على الجوال */
+  .persistent-cart-floating {
+    @apply md:left-0 bottom-0 top-auto h-auto w-full shadow-lg rounded-t-xl border-t border-gray-200;
+  }
+  
+  .floating-cart-badge {
+    @apply fixed left-4 bottom-4 bg-primary text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg animate-bounce z-50;
+  }
+  
+  .cart-count {
+    @apply text-lg font-bold;
+  }
+  
+  /* تأثير زر إضافة السلة */
+  .add-to-cart-btn {
+    @apply transition-transform duration-300 active:scale-95 shadow-md hover:shadow-lg;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* تأثير الموجة عند النقر */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: ripple-effect 0.7s linear;
+    pointer-events: none;
+  }
+  
+  @keyframes ripple-effect {
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+}
+
+/* تنسيقات الشعار المبسطة */
+.brand-logo {
+  font-family: 'Cairo', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+}
+
+@layer utilities {
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* إضافة تأثيرات أنيميشن جديدة للأزرار */
+  .animate-pulse-button {
+    animation: pulseButton 0.5s ease-out;
+  }
+  
+  @keyframes pulseButton {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(var(--secondary-color), 0.7);
+    }
+    70% {
+      transform: scale(0.98);
+      box-shadow: 0 0 0 10px rgba(var(--secondary-color), 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(var(--secondary-color), 0);
+    }
+  }
+  
+  .animate-click {
+    animation: clickEffect 0.4s ease-out;
+  }
+  
+  @keyframes clickEffect {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(0.95);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .animate-bounce-once {
+    animation: bounce-once 0.6s ease-in-out;
+  }
+  
+  @keyframes bounce-once {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-25%);
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.6s ease-in-out;
+  }
+  
+  @keyframes slide-in {
+    0% {
+      transform: translateX(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-in-out;
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+}
