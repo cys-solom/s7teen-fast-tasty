@@ -44,6 +44,7 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
         
         if (promoSnapshot.exists()) {
           const data = promoSnapshot.data() as PromoData;
+          console.log("SpecialPromo data fetched:", data); // إضافة سجل للتصحيح
           
           // التحقق من تاريخ انتهاء الإعلان إذا كان موجودًا
           if (data.expireDate) {
@@ -56,14 +57,11 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
             }
           }
           
-          // نضيف البيانات فقط إذا كان الإعلان مفعّل
-          if (data.enabled === true) {
-            setPromoData(data);
-          } else {
-            setPromoData(null);
-          }
+          // نضيف البيانات دائمًا بغض النظر عن حالة enabled
+          setPromoData(data);
         } else {
           // إذا لم يتم العثور على البيانات، نضع القيمة كـ null
+          console.log("No SpecialPromo data found"); // إضافة سجل للتصحيح
           setPromoData(null);
         }
       } catch (error) {
@@ -77,8 +75,14 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
     fetchPromoData();
   }, []);
 
-  // لا تعرض أي شيء إذا كان الإعلان غير مفعل أو جاري التحميل أو لم يتم العثور على بيانات
-  if (loading || !promoData || promoData.enabled !== true) {
+  // لا تعرض أي شيء إذا كان جاري التحميل أو لم يتم العثور على بيانات أو الإعلان غير مفعل بوضوح
+  if (loading || !promoData) {
+    return null;
+  }
+  
+  // التحقق من حالة التفعيل بطريقة أكثر تساهلاً
+  if (promoData.enabled === false) {
+    console.log("SpecialPromo is disabled"); // إضافة سجل للتصحيح
     return null;
   }
 
@@ -112,11 +116,6 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
         break;
     }
   };
-
-  // إذا لم تكن هناك بيانات للإعلان، لا تعرض شيئًا
-  if (!promoData) {
-    return null;
-  }
 
   // استخراج لون الخلفية من البروبس
   const bgColor = promoData.backgroundColor || "#a15623";

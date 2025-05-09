@@ -54,10 +54,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOrderNowClick, scrollFuncti
         
         if (heroBannerSnapshot.exists()) {
           const data = heroBannerSnapshot.data() as HeroBannerData;
-          // استخدام البيانات فقط إذا كان البانر مفعل
-          if (data.enabled) {
-            setHeroBanner(data);
-          }
+          console.log("HeroBanner data fetched:", data); // إضافة سجل للتصحيح
+          
+          // تعيين البيانات دائمًا بغض النظر عن حالة enabled
+          setHeroBanner(data);
         }
       } catch (error) {
         console.error("Error fetching hero banner data:", error);
@@ -69,11 +69,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOrderNowClick, scrollFuncti
     fetchHeroBanner();
   }, []);
 
-  // إذا كان البانر غير مفعل، استخدم البيانات الافتراضية
-  if (!heroBanner.enabled) {
-    return null;
-  }
-
   // استخدم متغير loading للإشارة إلى حالة التحميل
   if (loading) {
     return (
@@ -84,6 +79,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOrderNowClick, scrollFuncti
         </div>
       </div>
     );
+  }
+  
+  // التحقق من حالة التفعيل بطريقة أكثر تحديدًا
+  if (heroBanner.enabled === false) {
+    console.log("HeroBanner is disabled"); // إضافة سجل للتصحيح
+    return null;
   }
 
   // التعامل مع النقر على الزر حسب نوع الرابط
