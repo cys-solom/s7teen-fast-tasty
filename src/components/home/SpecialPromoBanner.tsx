@@ -30,6 +30,19 @@ interface PromoData {
   scrollTarget?: 'offers' | 'categories' | 'featured' | 'delivery';
 }
 
+// إضافة قيم افتراضية للإعلان الخاص
+const defaultPromoData: PromoData = {
+  enabled: true, // افتراضيًا يكون مفعل
+  title: "عرض خاص لفترة محدودة!",
+  description: "خصم 20% على جميع المنتجات",
+  subtext: "العرض ساري حتى نهاية الأسبوع",
+  backgroundColor: "#a15623",
+  buttonText: "اطلب الآن",
+  imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1887",
+  linkType: 'scroll',
+  scrollTarget: 'offers'
+};
+
 const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick, scrollFunctions }) => {
   const [promoData, setPromoData] = useState<PromoData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,7 +57,7 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
         
         if (promoSnapshot.exists()) {
           const data = promoSnapshot.data() as PromoData;
-          console.log("SpecialPromo data fetched:", data); // إضافة سجل للتصحيح
+          console.log("SpecialPromo data fetched:", data); 
           
           // التحقق من تاريخ انتهاء الإعلان إذا كان موجودًا
           if (data.expireDate) {
@@ -60,13 +73,15 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
           // نضيف البيانات دائمًا بغض النظر عن حالة enabled
           setPromoData(data);
         } else {
-          // إذا لم يتم العثور على البيانات، نضع القيمة كـ null
-          console.log("No SpecialPromo data found"); // إضافة سجل للتصحيح
-          setPromoData(null);
+          // إذا لم يتم العثور على البيانات، نستخدم البيانات الافتراضية
+          console.log("No SpecialPromo data found, using default");
+          setPromoData(defaultPromoData);
         }
       } catch (error) {
         console.error("Error fetching promo data:", error);
-        setPromoData(null);
+        // في حالة وجود خطأ نستخدم البيانات الافتراضية
+        console.log("Using default promo data due to error");
+        setPromoData(defaultPromoData);
       } finally {
         setLoading(false);
       }
@@ -75,14 +90,14 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
     fetchPromoData();
   }, []);
 
-  // لا تعرض أي شيء إذا كان جاري التحميل أو لم يتم العثور على بيانات أو الإعلان غير مفعل بوضوح
-  if (loading || !promoData) {
-    return null;
+  // استخدم متغير loading للإشارة إلى حالة التحميل
+  if (loading) {
+    return null; // يمكن إضافة شاشة تحميل هنا بدلاً من null
   }
   
-  // التحقق من حالة التفعيل بطريقة أكثر تساهلاً
-  if (promoData.enabled === false) {
-    console.log("SpecialPromo is disabled"); // إضافة سجل للتصحيح
+  // التحقق من البيانات: إما لا توجد بيانات أو الإعلان معطل صراحة
+  if (!promoData || promoData.enabled === false) {
+    console.log("SpecialPromo is not available:", !promoData ? "No data" : "Disabled");
     return null;
   }
 
@@ -160,6 +175,9 @@ const SpecialPromoBanner: React.FC<SpecialPromoBannerProps> = ({ onOrderNowClick
       return `linear-gradient(135deg, #8a4a1f, ${color}, #c27a43)`;
     }
   };
+
+  // تسجيل لتأكيد أن الإعلان سيظهر
+  console.log("SpecialPromo will be displayed with title:", promoData.title);
 
   return (
     <div className="my-6 sm:my-8">
